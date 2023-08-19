@@ -37,7 +37,12 @@ SynthTIGER requires `python>=3.6` and `libraqm`.
 To install SynthTIGER from PyPI:
 
 ```bash
-$ pip install synthtiger
+brew install libraqm
+pip install synthtiger
+
+# Optional if libraqm error occurs while using synthiger:
+pip uninstall Pillow
+pip install Pillow==9.5.0  --global-option="build_ext" --global-option="--enable-raqm"
 ```
 
 If you see a dependency error when you install or run SynthTIGER, install [dependencies](depends).
