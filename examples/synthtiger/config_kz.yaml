@@ -29,7 +29,7 @@ corpus:
       min_length: 1
       max_length: 25
       textcase: [lower, upper, capitalize]
-      augmentation: 0.5
+      augmentation: 0.3
       augmentation_charset: resources/charset/alphanum_kz.txt
 
 font:
