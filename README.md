@@ -87,8 +87,11 @@ synthtiger -o results -w 4 -v examples/synthtiger/template.py SynthTiger example
 synthtiger -o results -w 4 -v examples/synthtiger/template.py SynthTiger examples/synthtiger/config_kz_book.yaml
 
 # custom count, location, cores
-synthtiger -c 100000 -o ../PaddleOCR_Mukhtar/train_data/rec/synthtiger/train_more -w 20 -v examples/synthtiger/template.py SynthTiger examples/synthtiger/config_kz.yaml
-synthtiger -c 1000 -o ../PaddleOCR_Mukhtar/train_data/rec/synthtiger/test -w 20 -v examples/synthtiger/template.py SynthTiger examples/synthtiger/config_kz.yaml
+synthtiger -c 100000 -o ./results/train -w 20 -v examples/synthtiger/template.py SynthTiger examples/synthtiger/config_kz.yaml
+synthtiger -c 100 -o ./results/test -w 20 -v examples/synthtiger/template.py SynthTiger examples/synthtiger/config_kz.yaml
+
+synthtiger -c 300000 -o ./results/train -w 20 -v examples/synthtiger/template.py SynthTiger examples/synthtiger/config_kz_generated.yaml
+synthtiger -c 3000 -o ./results/test -w 20 -v examples/synthtiger/template.py SynthTiger examples/synthtiger/config_kz_generated.yaml
 ```
 
 <p>

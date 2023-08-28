@@ -13,24 +13,21 @@ midground_offset:
 foreground_mask_pad: 5
 
 corpus:
-  weights: [1, 1]
+  weights: [1, 0]
   args:
     # length augmentable corpus
-    - paths: [resources/corpus/kk_dict.txt]
+    - paths: [resources/corpus/kz_corpus_generated.txt]
       weights: [1]
       min_length: 1
-      max_length: 25
-      textcase: [lower, upper, capitalize]
-      augmentation: 0.1
-      augmentation_length: [1, 25]
+      max_length: 40
     # char augmentable corpus
-    - paths: [resources/corpus/kk_dict.txt]
-      weights: [1]
+    - paths: []
+      weights: []
       min_length: 1
-      max_length: 25
+      max_length: 40
       textcase: [lower, upper, capitalize]
-      augmentation: 0.3
-      augmentation_charset: resources/charset/alphanum_kz.txt
+      augmentation: 0
+      augmentation_charset: resources/charset/alphanum_kz_gen.txt
 
 font:
   paths: [resources/font]
