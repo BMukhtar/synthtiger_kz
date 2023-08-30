@@ -5,10 +5,10 @@ with open('resources/corpus/kk_dict.txt', 'r', encoding='utf-8') as f:
     words = f.read().splitlines()
 
 # Define the symbols
-symbols = '0123456789!"#$%\'()*+,-.:;<=>?@[]`{} €АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯЁабвгдежзийклмнопрстуфхцчшщъыьэюяёӘҒҚҢӨҰҮІҺәғқңөұүіһ'
+symbols = '0123456789!\'#$%()*+/,-.:;<=>? €АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯЁабвгдежзийклмнопрстуфхцчшщъыьэюяёӘҒҚҢӨҰҮІҺәғқңөұүіһ'
 
 # Define maximum and minimum sequence length
-max_n = 40
+max_n = 80
 min_n = 2
 
 # Initialize character counts
@@ -29,7 +29,7 @@ for i in range(200_000):  # Adjust the range as needed
     sequence = ''
     target_length = random.randint(min_n, max_n)
     while len(sequence) < target_length:
-        if random.random() < 0.7:  # Adjust the probability as needed
+        if random.random() < 0.8:  # Adjust the probability as needed
             word = random.choice(words)
             for char in word:
                 sequence += char
@@ -46,8 +46,9 @@ for i in range(200_000):  # Adjust the range as needed
     corpus.append(sequence)
 
 # Write corpus to corpus.txt
-with open('./resources/corpus/kz_corpus_generated.txt', 'w', encoding='utf-8') as f:
+path = "./resources/corpus/kz_corpus_generated.txt"
+with open(path, 'w', encoding='utf-8') as f:
     for sequence in corpus:
         f.write(sequence + '\n')
 
-print('Corpus generated and written to corpus.txt')
+print(f'Corpus generated and written to {path}')

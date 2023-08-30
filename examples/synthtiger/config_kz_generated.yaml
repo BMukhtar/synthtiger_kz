@@ -19,18 +19,18 @@ corpus:
     - paths: [resources/corpus/kz_corpus_generated.txt]
       weights: [1]
       min_length: 1
-      max_length: 40
+      max_length: 80
     # char augmentable corpus
     - paths: []
       weights: []
       min_length: 1
-      max_length: 40
+      max_length: 80
       textcase: [lower, upper, capitalize]
       augmentation: 0
       augmentation_charset: resources/charset/alphanum_kz_gen.txt
 
 font:
-  paths: [resources/font]
+  paths: [resources/kz_fonts]
   weights: [1]
   size: [40, 80]
   bold: 0.5
