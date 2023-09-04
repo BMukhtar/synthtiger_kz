@@ -5,7 +5,7 @@ with open('resources/corpus/kk_dict.txt', 'r', encoding='utf-8') as f:
     words = f.read().splitlines()
 
 # Define the symbols
-symbols = '0123456789!\'#$%()*+/,-.:;<=>? €АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯЁабвгдежзийклмнопрстуфхцчшщъыьэюяёӘҒҚҢӨҰҮІҺәғқңөұүіһ'
+symbols = "0123456789!'#$%()*+/,-.:;<=>? АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯЁабвгдежзийклмнопрстуфхцчшщъыьэюяёӘҒҚҢӨҰҮІҺәғқңөұүіһ"
 
 # Define maximum and minimum sequence length
 max_n = 80
