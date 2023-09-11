@@ -8,7 +8,7 @@ numbers = "0123456789"
 other_symbols = "'#()<>+-/*=%$"
 space_symbol = ' '
 all_letters = 'АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯЁабвгдежзийклмнопрстуфхцчшщъыьэюяёӘҒҚҢӨҰҮІҺәғқңөұүіһ'
-all_symbols = afterword_symbols + numbers + other_symbols + space_symbol + all_letters
+all_symbols = numbers + afterword_symbols + other_symbols + space_symbol + all_letters
 print(all_symbols)
 
 # Define maximum and minimum sequence length
