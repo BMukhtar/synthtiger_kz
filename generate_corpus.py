@@ -42,8 +42,8 @@ def handle_less_frequent_letters():
 
     return word
 
-def get_scaled_number():
-    log_rand = random.uniform(math.log(1), math.log(100_000))
+def get_scaled_number(min = 1, max = 100_000):
+    log_rand = random.uniform(math.log(min), math.log(max))
     rand_val = math.exp(log_rand)
 
     # Round to the nearest integer
@@ -81,21 +81,28 @@ def handle_time():
 
 
 def handle_other():
-    n = random.randint(1, 7)
+    n = random.randint(1, 10)
     if n == 1:
         return handle_hashtag()
     if n == 2:
-        return "(" + random.choice(words) + ")"
+        return random.choice(["(", ""]) + random.choice(words) + random.choice([")", ""])
     if n == 3:
         return "<" + random.choice(words) + ">"
     if n == 4:
-        return "''" + random.choice(words) + "''"
+        tik = random.choice(["'", "''"])
+        return tik + random.choice(words) + tik
     if n == 5:
-        return random.choice(words) + "'"
+        return random.choice(words) + "-"
     if n == 6:
         return handle_date()
     if n == 7:
         return handle_time()
+    if n == 8:
+        return random.choice(["(", ""]) + get_scaled_number(1, 3000) + "-" + get_scaled_number(1, 3000) + random.choice([")", ""])
+    if n == 9:
+        return random.choice(words) + "-" + random.choice(words)
+    if n == 10:
+        return "т.б."
 
 def get_candidate() -> str:
     word = random.choice(words)
@@ -104,15 +111,15 @@ def get_candidate() -> str:
 
     choice = random.random()
     # Append a special symbol
-    if choice < 0.3:
+    if choice < 0.2:
         return random.choice(words) + random.choice(afterword_symbols)
     # Append a number
-    elif choice < 0.6:
+    elif choice < 0.4:
         number = get_random_number()
         return number
-    elif choice < 0.65:
+    elif choice < 0.45:
         return handle_math_expression()
-    elif choice < 0.8:
+    elif choice < 0.6:
         return handle_less_frequent_letters()
     # Append other symbols
     else:
