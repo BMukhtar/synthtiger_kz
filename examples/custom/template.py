@@ -3,7 +3,6 @@ SynthTIGER
 Copyright (c) 2021-present NAVER Corp.
 MIT license
 """
-import json_tricks
 import json
 import os
 
