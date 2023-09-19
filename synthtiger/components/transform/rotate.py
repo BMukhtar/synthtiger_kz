@@ -25,6 +25,7 @@ class Rotate(Component):
         ccw = meta.get("ccw", np.random.rand() < self.ccw)
 
         meta = {
+            "name": self.__class__.__name__,
             "angle": angle,
             "ccw": ccw,
         }

@@ -40,6 +40,7 @@ class TextBorder(Component):
         grayscale = meta.get("grayscale", np.random.rand() < self.grayscale)
 
         meta = {
+            "name": self.__class__.__name__,
             "size": size,
             "rgb": rgb,
             "alpha": alpha,

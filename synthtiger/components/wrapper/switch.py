@@ -29,6 +29,7 @@ class Switch(Component):
             sub_meta = self.component.sample(meta.get("meta"))
 
         meta = {
+            "name": self.__class__.__name__,
             "state": state,
             "meta": sub_meta,
         }

@@ -67,8 +67,6 @@ class SynthTiger(templates.Template):
             components.Selector(
                 [
                     components.TextBorder(),
-                    components.TextShadow(),
-                    components.TextExtrusion(),
                 ]
             ),
             **config.get("style", {}),
@@ -100,17 +98,19 @@ class SynthTiger(templates.Template):
         )
 
     def generate(self):
-        quality = np.random.randint(self.quality[0], self.quality[1] + 1)
-        fg_color, fg_style, mg_color, mg_style, bg_color = self._generate_color()
         meta = {}
 
-        fg_image, label, bboxes, glyph_fg_image, glyph_bboxes, text_metas = self._generate_text(
+        quality = np.random.randint(self.quality[0], self.quality[1] + 1)
+        meta["quality"] = quality
+
+        fg_color, fg_style, bg_color = self._generate_color()
+        fg_image, label, bboxes, glyph_fg_image, glyph_bboxes, text_meta = self._generate_text(
             fg_color, fg_style
         )
-        meta["text_metas"] = text_metas
+        meta["text"] = text_meta
 
-        bg_image, background_metas = self._generate_background(fg_image.shape[:2][::-1], bg_color)
-        meta["background_metas"] = background_metas
+        bg_image, background_meta = self._generate_background(fg_image.shape[:2][::-1], bg_color)
+        meta["background"] = background_meta
 
         image, blend_modes = _blend_images(fg_image, bg_image, self.visibility_check)
         meta["blend_modes"] = blend_modes
@@ -119,7 +119,7 @@ class SynthTiger(templates.Template):
             [image, fg_image, glyph_fg_image]
         )
         image, fg_image, glyph_fg_image = post_outs
-        meta["post_meta"] = post_meta
+        meta["post_process"] = post_meta
 
         data = {
             "image": image,
@@ -212,9 +212,7 @@ class SynthTiger(templates.Template):
             self.glyph_coords_file.close()
 
     def _generate_color(self):
-        mg_color = self.color.sample()
         fg_style = self.style.sample()
-        mg_style = self.style.sample()
 
         if fg_style["state"]:
             fg_color, bg_color, style_color = self.colormap3.sample()
@@ -222,10 +220,10 @@ class SynthTiger(templates.Template):
         else:
             fg_color, bg_color = self.colormap2.sample()
 
-        return fg_color, fg_style, mg_color, mg_style, bg_color
+        return fg_color, fg_style, bg_color
 
     def _generate_text(self, color, style):
-        metas = []
+        meta = {}
         label = self.corpus.data(self.corpus.sample())
 
         # for script using diacritic, ligature and RTL
@@ -233,8 +231,10 @@ class SynthTiger(templates.Template):
 
         text = "".join(chars)
         font = self.font.sample({"text": text, "vertical": self.vertical})
+        meta["font"] = font
 
         char_layers = [layers.TextLayer(char, **font) for char in chars]
+        metas = []
         metas.append(self.shape.apply(char_layers))
         metas.append(self.layout.apply(char_layers, {"meta": {"vertical": self.vertical}}))
         char_glyph_layers = [char_layer.copy() for char_layer in char_layers]
@@ -251,6 +251,7 @@ class SynthTiger(templates.Template):
         ))
         metas.append(self.fit.apply([text_layer, text_glyph_layer, *char_layers, *char_glyph_layers]))
         metas.append(self.pad.apply([text_layer]))
+        meta["applied"] = metas
 
         for char_layer in char_layers:
             char_layer.topleft -= text_layer.topleft
@@ -263,7 +264,7 @@ class SynthTiger(templates.Template):
         glyph_out = text_glyph_layer.output(bbox=text_layer.bbox)
         glyph_bboxes = [char_glyph_layer.bbox for char_glyph_layer in char_glyph_layers]
 
-        return out, label, bboxes, glyph_out, glyph_bboxes, metas
+        return out, label, bboxes, glyph_out, glyph_bboxes, meta
 
     def _generate_background(self, size, color):
         metas = []

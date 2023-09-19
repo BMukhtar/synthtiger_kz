@@ -55,6 +55,7 @@ class FlowLayout(Component):
         vertical = meta.get("vertical", self.vertical)
 
         meta = {
+            "name": self.__class__.__name__,
             "length": length,
             "space": space,
             "line_space": line_space,

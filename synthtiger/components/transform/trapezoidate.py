@@ -40,6 +40,7 @@ class Trapezoidate(Component):
         align = meta.get("align", np.random.uniform(self.align[0], self.align[1]))
 
         meta = {
+            "name": self.__class__.__name__,
             "side": side,
             "px": px,
             "percent": percent,

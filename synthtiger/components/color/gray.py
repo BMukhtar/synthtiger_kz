@@ -27,6 +27,7 @@ class Gray(Component):
         rgb = meta.get("rgb", utils.to_rgb(gray, colorize))
 
         meta = {
+            "name": self.__class__.__name__,
             "rgb": rgb,
             "gray": gray,
             "alpha": alpha,

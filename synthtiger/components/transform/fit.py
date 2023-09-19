@@ -10,7 +10,9 @@ from synthtiger.components.component import Component
 
 class Fit(Component):
     def sample(self, meta=None):
-        meta = {}
+        meta = {
+            "name": self.__class__.__name__,
+        }
         return meta
 
     def apply(self, layers, meta=None):

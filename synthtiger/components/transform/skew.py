@@ -28,6 +28,7 @@ class Skew(Component):
         ccw = meta.get("ccw", np.random.rand() < self.ccw)
 
         meta = {
+            "name": self.__class__.__name__,
             "axis": axis,
             "angle": angle,
             "ccw": ccw,

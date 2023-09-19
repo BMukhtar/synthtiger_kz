@@ -24,6 +24,7 @@ class AdditiveGaussianNoise(Component):
         per_channel = meta.get("per_channel", np.random.rand() < self.per_channel)
 
         meta = {
+            "name": self.__class__.__name__,
             "scale": scale,
             "per_channel": per_channel,
         }

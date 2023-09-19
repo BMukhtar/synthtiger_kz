@@ -22,6 +22,7 @@ class MedianBlur(Component):
         k = meta.get("k", np.random.randint(self.k[0], self.k[1] + 1))
 
         meta = {
+            "name": self.__class__.__name__,
             "k": k,
         }
 

@@ -24,6 +24,7 @@ class ElasticDistortion(Component):
         sigma = meta.get("sigma", np.random.uniform(self.sigma[0], self.sigma[1]))
 
         meta = {
+            "name": self.__class__.__name__,
             "alpha": alpha,
             "sigma": sigma,
         }

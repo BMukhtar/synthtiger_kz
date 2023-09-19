@@ -75,22 +75,12 @@ layout:
       upward: 0.5
 
 style:
-  prob: 0.25
+  prob: 0.1
   args:
-    weights: [1, 2, 2]
+    weights: [1]
     args:
       # text border
       - size: [1, 12]
-        alpha: [1, 1]
-        grayscale: 0
-      # text shadow
-      - distance: [1, 6]
-        angle: [0, 360]
-        alpha: [0.3, 0.7]
-        grayscale: 0
-      # text extrusion
-      - length: [1, 12]
-        angle: [0, 360]
         alpha: [1, 1]
         grayscale: 0
 

@@ -23,6 +23,7 @@ class Iterator(Component):
         sub_metas = meta.get("metas", [{} for _ in self.components])
 
         meta = {
+            "name": self.__class__.__name__,
             "metas": [],
         }
 

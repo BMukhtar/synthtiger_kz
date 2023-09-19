@@ -52,6 +52,7 @@ class Perspective(Component):
         )
 
         meta = {
+            "name": self.__class__.__name__,
             "pxs": pxs,
             "percents": percents,
             "aligns": aligns,

@@ -30,6 +30,7 @@ class Selector(Component):
         sub_meta = self.components[idx].sample(meta.get("meta"))
 
         meta = {
+            "name": self.__class__.__name__,
             "idx": idx,
             "meta": sub_meta,
         }

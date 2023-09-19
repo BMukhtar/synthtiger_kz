@@ -22,6 +22,7 @@ class Resample(Component):
         size = meta.get("size", np.random.uniform(self.size[0], self.size[1]))
 
         meta = {
+            "name": self.__class__.__name__,
             "size": size,
         }
 

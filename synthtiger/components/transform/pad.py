@@ -46,6 +46,7 @@ class Pad(Component):
         value = meta.get("value", self.value)
 
         meta = {
+            "name": self.__class__.__name__,
             "pxs": pxs,
             "percents": percents,
             "mode": mode,

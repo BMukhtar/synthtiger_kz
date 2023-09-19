@@ -37,6 +37,7 @@ class GrayMap(ColorMap):
             rgb = utils.to_rgb(gray, colorize)
             new_meta.append(
                 {
+                    "name": self.__class__.__name__,
                     "gray": gray,
                     "rgb": rgb,
                     "alpha": alpha,

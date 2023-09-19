@@ -32,6 +32,7 @@ class CurveLayout(Component):
         vertical = meta.get("vertical", self.vertical)
 
         meta = {
+            "name": self.__class__.__name__,
             "curve": curve,
             "space": space,
             "convex": convex,
