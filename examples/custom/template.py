@@ -3,7 +3,8 @@ SynthTIGER
 Copyright (c) 2021-present NAVER Corp.
 MIT license
 """
-
+import json_tricks
+import json
 import os
 
 import cv2
@@ -40,11 +41,6 @@ class SynthTiger(templates.Template):
         self.vertical = config.get("vertical", False)
         self.quality = config.get("quality", [95, 95])
         self.visibility_check = config.get("visibility_check", False)
-        self.midground = config.get("midground", 0)
-        self.midground_offset = components.Translate(
-            **config.get("midground_offset", {})
-        )
-        self.foreground_mask_pad = config.get("foreground_mask_pad", 0)
         self.corpus = components.Selector(
             [
                 components.BaseCorpus(),
@@ -106,23 +102,25 @@ class SynthTiger(templates.Template):
 
     def generate(self):
         quality = np.random.randint(self.quality[0], self.quality[1] + 1)
-        midground = np.random.rand() < self.midground
         fg_color, fg_style, mg_color, mg_style, bg_color = self._generate_color()
+        meta = {}
 
-        fg_image, label, bboxes, glyph_fg_image, glyph_bboxes = self._generate_text(
+        fg_image, label, bboxes, glyph_fg_image, glyph_bboxes, text_metas = self._generate_text(
             fg_color, fg_style
         )
-        bg_image = self._generate_background(fg_image.shape[:2][::-1], bg_color)
+        meta["text_metas"] = text_metas
 
-        if midground:
-            mg_image, _, _, _, _ = self._generate_text(mg_color, mg_style)
-            mg_image = self._erase_image(mg_image, fg_image)
-            bg_image = _blend_images(mg_image, bg_image, self.visibility_check)
+        bg_image, background_metas = self._generate_background(fg_image.shape[:2][::-1], bg_color)
+        meta["background_metas"] = background_metas
 
-        image = _blend_images(fg_image, bg_image, self.visibility_check)
-        image, fg_image, glyph_fg_image = self._postprocess_images(
+        image, blend_modes = _blend_images(fg_image, bg_image, self.visibility_check)
+        meta["blend_modes"] = blend_modes
+
+        post_outs, post_meta = self._postprocess_images(
             [image, fg_image, glyph_fg_image]
         )
+        image, fg_image, glyph_fg_image = post_outs
+        meta["post_meta"] = post_meta
 
         data = {
             "image": image,
@@ -132,6 +130,7 @@ class SynthTiger(templates.Template):
             "bboxes": bboxes,
             "glyph_mask": glyph_fg_image[..., 3],
             "glyph_bboxes": glyph_bboxes,
+            "meta": meta,
         }
 
         return data
@@ -142,8 +141,10 @@ class SynthTiger(templates.Template):
         gt_path = os.path.join(root, "gt.txt")
         coords_path = os.path.join(root, "coords.txt")
         glyph_coords_path = os.path.join(root, "glyph_coords.txt")
+        meta_path = os.path.join(root, "meta.jsonl")
 
         self.gt_file = open(gt_path, "w", encoding="utf-8")
+        self.meta_file = open(meta_path, "w", encoding="utf-8")
         if self.coord_output:
             self.coords_file = open(coords_path, "w", encoding="utf-8")
         if self.glyph_coord_output:
@@ -187,6 +188,17 @@ class SynthTiger(templates.Template):
             glyph_mask.save(glyph_mask_path)
 
         self.gt_file.write(f"{image_key}\t{label}\n")
+        meta = data["meta"]
+        # Create a new dictionary with 'image_key' and 'label' first
+        new_meta = {
+            "final_image_path": image_key,
+            "label": label
+        }
+
+        # Update the new dictionary with the original meta dictionary
+        new_meta.update(meta)
+        compressed_oneline_json = json.dumps(new_meta, ensure_ascii=False)
+        self.meta_file.write(f"{compressed_oneline_json}\n")
         if self.coord_output:
             self.coords_file.write(f"{image_key}\t{coords}\n")
         if self.glyph_coord_output:
@@ -194,6 +206,7 @@ class SynthTiger(templates.Template):
 
     def end_save(self, root):
         self.gt_file.close()
+        self.meta_file.close()
         if self.coord_output:
             self.coords_file.close()
         if self.glyph_coord_output:
@@ -213,6 +226,7 @@ class SynthTiger(templates.Template):
         return fg_color, fg_style, mg_color, mg_style, bg_color
 
     def _generate_text(self, color, style):
+        metas = []
         label = self.corpus.data(self.corpus.sample())
 
         # for script using diacritic, ligature and RTL
@@ -222,22 +236,22 @@ class SynthTiger(templates.Template):
         font = self.font.sample({"text": text, "vertical": self.vertical})
 
         char_layers = [layers.TextLayer(char, **font) for char in chars]
-        self.shape.apply(char_layers)
-        self.layout.apply(char_layers, {"meta": {"vertical": self.vertical}})
+        metas.append(self.shape.apply(char_layers))
+        metas.append(self.layout.apply(char_layers, {"meta": {"vertical": self.vertical}}))
         char_glyph_layers = [char_layer.copy() for char_layer in char_layers]
 
         text_layer = layers.Group(char_layers).merge()
         text_glyph_layer = text_layer.copy()
 
         transform = self.transform.sample()
-        self.color.apply([text_layer, text_glyph_layer], color)
-        self.texture.apply([text_layer, text_glyph_layer])
-        self.style.apply([text_layer, *char_layers], style)
-        self.transform.apply(
+        metas.append(self.color.apply([text_layer, text_glyph_layer], color))
+        metas.append(self.texture.apply([text_layer, text_glyph_layer]))
+        metas.append(self.style.apply([text_layer, *char_layers], style))
+        metas.append(self.transform.apply(
             [text_layer, text_glyph_layer, *char_layers, *char_glyph_layers], transform
-        )
-        self.fit.apply([text_layer, text_glyph_layer, *char_layers, *char_glyph_layers])
-        self.pad.apply([text_layer])
+        ))
+        metas.append(self.fit.apply([text_layer, text_glyph_layer, *char_layers, *char_glyph_layers]))
+        metas.append(self.pad.apply([text_layer]))
 
         for char_layer in char_layers:
             char_layer.topleft -= text_layer.topleft
@@ -250,29 +264,21 @@ class SynthTiger(templates.Template):
         glyph_out = text_glyph_layer.output(bbox=text_layer.bbox)
         glyph_bboxes = [char_glyph_layer.bbox for char_glyph_layer in char_glyph_layers]
 
-        return out, label, bboxes, glyph_out, glyph_bboxes
+        return out, label, bboxes, glyph_out, glyph_bboxes, metas
 
     def _generate_background(self, size, color):
+        metas = []
         layer = layers.RectLayer(size)
-        self.color.apply([layer], color)
-        self.texture.apply([layer])
+        metas.append(self.color.apply([layer], color))
+        metas.append(self.texture.apply([layer]))
         out = layer.output()
-        return out
-
-    def _erase_image(self, image, mask):
-        mask = _create_poly_mask(mask, self.foreground_mask_pad)
-        mask_layer = layers.Layer(mask)
-        image_layer = layers.Layer(image)
-        image_layer.bbox = mask_layer.bbox
-        self.midground_offset.apply([image_layer])
-        out = image_layer.erase(mask_layer).output(bbox=mask_layer.bbox)
-        return out
+        return out, metas
 
     def _postprocess_images(self, images):
         image_layers = [layers.Layer(image) for image in images]
-        self.postprocess.apply(image_layers)
+        meta = self.postprocess.apply(image_layers)
         outs = [image_layer.output() for image_layer in image_layers]
-        return outs
+        return outs, meta
 
 
 def _blend_images(src, dst, visibility_check=False):
@@ -285,7 +291,7 @@ def _blend_images(src, dst, visibility_check=False):
     else:
         raise RuntimeError("Text is not visible")
 
-    return out
+    return out, blend_modes.tolist()
 
 
 def _check_visibility(image, mask):

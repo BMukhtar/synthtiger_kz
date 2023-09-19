@@ -46,6 +46,7 @@ setup(
         "pyyaml",
         "regex",
         "scipy",
+        "json-tricks",
     ],
     entry_points={
         "console_scripts": [

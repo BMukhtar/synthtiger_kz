@@ -7,11 +7,6 @@ vertical: false
 quality: [70, 99]
 visibility_check: true
 
-midground: 0.25
-midground_offset:
-  percents: [[-0.5, 0.5], [-0.5, 0.5]]
-foreground_mask_pad: 5
-
 corpus:
   weights: [1]
   args:
