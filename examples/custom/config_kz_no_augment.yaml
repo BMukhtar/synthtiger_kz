@@ -66,11 +66,11 @@ layout:
   weights: [4, 1]
   args:
     # flow layout
-    - space: [-2, 5]
+    - space: [-1, 4]
       line_align: [middle]
     # curve layout
-    - curve: [20, 40]
-      space: [-2, 5]
+    - curve: [5, 20]
+      space: [-1, 4]
       convex: 0.5
       upward: 0.5
 
