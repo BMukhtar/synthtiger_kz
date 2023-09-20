@@ -1,0 +1,182 @@
+{
+  "final_image_path": "images/0/0.jpg",
+  "label": "2% <тиет> тәйір шамдал",
+  "quality": 92,
+  "colormap2": [
+    {
+      "name": "GrayMap",
+      "gray": 64,
+      "rgb": [
+        109,
+        49,
+        23
+      ],
+      "alpha": 1.0,
+      "colorize": true
+    },
+    {
+      "name": "GrayMap",
+      "gray": 257,
+      "rgb": [
+        143,
+        76,
+        1488
+      ],
+      "alpha": 1.0,
+      "colorize": true
+    }
+  ],
+  "fg_style": {
+    "name": "Switch",
+    "state": false,
+    "meta": null
+  },
+  "corpus": {
+    "name": "Selector",
+    "idx": 0,
+    "meta": {
+      "text": "2% <тиет> тәйір шамдал"
+    }
+  },
+  "font": {
+    "path": "resources/kz_fonts/RobotoMono-Italic.ttf",
+    "size": 35,
+    "bold": false,
+    "vertical": false
+  },
+  "shape": {
+    "name": "Switch",
+    "state": true,
+    "meta": {
+      "name": "Selector",
+      "idx": 0,
+      "meta": {
+        "name": "ElasticDistortion",
+        "alpha": 16.334924769733078,
+        "sigma": 7.013936891178843
+      }
+    }
+  },
+  "layout": {
+    "name": "Selector",
+    "idx": 0,
+    "meta": {
+      "name": "FlowLayout",
+      "length": null,
+      "space": 1,
+      "line_space": 0,
+      "align": "left",
+      "line_align": "middle",
+      "ltr": true,
+      "ttb": true,
+      "vertical": false
+    }
+  },
+  "texture": {
+    "name": "Switch",
+    "state": false,
+    "meta": null
+  },
+  "transform": {
+    "name": "Switch",
+    "state": true,
+    "meta": {
+      "name": "Selector",
+      "idx": 0,
+      "meta": {
+        "name": "Perspective",
+        "pxs": null,
+        "percents": [
+          0.9707224013606995,
+          1.0
+        ],
+        "aligns": [
+          0.0,
+          0.0
+        ]
+      }
+    }
+  },
+  "fit": {
+    "name": "Fit"
+  },
+  "pad": {
+    "name": "Switch",
+    "state": true,
+    "meta": {
+      "name": "Pad",
+      "pxs": [
+        4,
+        6,
+        9,
+        7
+      ],
+      "percents": null,
+      "mode": "constant",
+      "value": 0
+    }
+  },
+  "back_texture": {
+    "name": "Switch",
+    "state": true,
+    "meta": {
+      "path": "resources/image/bedroom_83.jpg",
+      "alpha": 0.12627243675241895,
+      "grayscale": false,
+      "crop": true,
+      "x": 120,
+      "y": 18,
+      "w": 175,
+      "h": 259
+    }
+  },
+  "blend": [
+    "normal",
+    "lighten_only",
+    "addition",
+    "difference",
+    "divide",
+    "overlay",
+    "hard_light",
+    "multiply",
+    "screen",
+    "darken_only",
+    "soft_light",
+    "dodge"
+  ],
+  "post": {
+    "name": "Iterator",
+    "metas": [
+      {
+        "name": "Switch",
+        "state": true,
+        "meta": {
+          "name": "AdditiveGaussianNoise",
+          "scale": 5.368426046921068,
+          "per_channel": false
+        }
+      },
+      {
+        "name": "Switch",
+        "state": true,
+        "meta": {
+          "name": "GaussianBlur",
+          "sigma": 1
+        }
+      },
+      {
+        "name": "Switch",
+        "state": false,
+        "meta": null
+      },
+      {
+        "name": "Switch",
+        "state": true,
+        "meta": {
+          "name": "MedianBlur",
+          "k": 1
+        }
+      }
+    ]
+  }
+}
