@@ -49,5 +49,5 @@ class Gray(Component):
     def data(self, meta):
         rgb = meta["rgb"]
         alpha = round(meta["alpha"] * 255)
-        color = rgb + [alpha]
+        color = tuple(rgb) + (alpha,)
         return color

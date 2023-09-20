@@ -18,7 +18,6 @@ else:
     print("The last segment of the path is not 'synthtiger'")
     raise Exception("Directory mismatch!")
 
-
 import json
 import os
 
@@ -42,6 +41,7 @@ BLEND_MODES = [
     "darken_only",
     "lighten_only",
 ]
+
 
 class Keys:
     POST = 'post'
@@ -131,7 +131,7 @@ class SynthTiger(templates.Template):
         )
 
     def generate(self):
-        return self.generate_from_meta(input_meta = {})
+        return self.generate_from_meta(input_meta={})
 
     def generate_from_meta(self, input_meta):
         output_meta = {}
@@ -167,7 +167,6 @@ class SynthTiger(templates.Template):
             "glyph_bboxes": glyph_bboxes,
             "meta": output_meta,
         }
-
 
     def init_save(self, root):
         os.makedirs(root, exist_ok=True)
@@ -277,25 +276,25 @@ class SynthTiger(templates.Template):
 
         char_layers = [layers.TextLayer(char, **font) for char in chars]
 
-
-        meta[Keys.SHAPE]=self.shape.apply(char_layers, meta = input_meta.get(Keys.SHAPE))
+        meta[Keys.SHAPE] = self.shape.apply(char_layers, meta=input_meta.get(Keys.SHAPE))
         default_layout_meta = {"meta": {"vertical": self.vertical}}
         if input_meta.get(Keys.LAYOUT) is not None:
             default_layout_meta = input_meta.get(Keys.LAYOUT)
-        meta[Keys.LAYOUT]=self.layout.apply(char_layers, default_layout_meta)
+        meta[Keys.LAYOUT] = self.layout.apply(char_layers, default_layout_meta)
         char_glyph_layers = [char_layer.copy() for char_layer in char_layers]
 
         text_layer = layers.Group(char_layers).merge()
         text_glyph_layer = text_layer.copy()
 
         self.color.apply([text_layer, text_glyph_layer], color)
-        meta[Keys.TEXTURE]=self.texture.apply([text_layer, text_glyph_layer], meta=input_meta.get(Keys.TEXTURE))
+        meta[Keys.TEXTURE] = self.texture.apply([text_layer, text_glyph_layer], meta=input_meta.get(Keys.TEXTURE))
         self.style.apply([text_layer, *char_layers], style)
-        meta[Keys.TRANSFORM]=self.transform.apply(
+        meta[Keys.TRANSFORM] = self.transform.apply(
             [text_layer, text_glyph_layer, *char_layers, *char_glyph_layers], meta=input_meta.get(Keys.TRANSFORM)
         )
-        meta[Keys.FIT]=self.fit.apply([text_layer, text_glyph_layer, *char_layers, *char_glyph_layers], meta=input_meta.get(Keys.FIT))
-        meta[Keys.PAD]=self.pad.apply([text_layer], meta=input_meta.get(Keys.PAD))
+        meta[Keys.FIT] = self.fit.apply([text_layer, text_glyph_layer, *char_layers, *char_glyph_layers],
+                                        meta=input_meta.get(Keys.FIT))
+        meta[Keys.PAD] = self.pad.apply([text_layer], meta=input_meta.get(Keys.PAD))
 
         for char_layer in char_layers:
             char_layer.topleft -= text_layer.topleft
@@ -395,6 +394,8 @@ import json
 config_path = "./examples/custom/config_kz_no_augment.yaml"
 output_path = "./results/invest"
 input_meta_path = "./tests/input_meta.json"
+
+synthtiger.set_global_random_seed(seed=0)
 
 config = synthtiger.read_config(config_path)
 pprint.pprint(config)

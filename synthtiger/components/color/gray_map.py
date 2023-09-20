@@ -56,7 +56,7 @@ class GrayMap(ColorMap):
         for data in meta:
             rgb = data["rgb"]
             alpha = round(data["alpha"] * 255)
-            color = rgb + (alpha,)
+            color = tuple(rgb) + (alpha,)
             colors.append(color)
 
         return colors

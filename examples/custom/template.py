@@ -1,8 +1,3 @@
-"""
-SynthTIGER
-Copyright (c) 2021-present NAVER Corp.
-MIT license
-"""
 import json
 import os
 
@@ -26,6 +21,24 @@ BLEND_MODES = [
     "darken_only",
     "lighten_only",
 ]
+
+
+class Keys:
+    POST = 'post'
+    BLEND = 'blend'
+    BACK_TEXTURE = 'back_texture'
+    COLORMAP2 = 'colormap2'
+    COLORMAP3 = 'colormap3'
+    FG_STYLE = 'fg_style'
+    QUALITY = 'quality'
+    SHAPE = 'shape'
+    FONT = 'font'
+    CORPUS = "corpus"
+    LAYOUT = 'layout'
+    TEXTURE = 'texture'
+    TRANSFORM = 'transform'
+    FIT = 'fit'
+    PAD = 'pad'
 
 
 class SynthTiger(templates.Template):
@@ -98,30 +111,33 @@ class SynthTiger(templates.Template):
         )
 
     def generate(self):
-        meta = {}
+        return self.generate_from_meta(input_meta={})
 
-        quality = np.random.randint(self.quality[0], self.quality[1] + 1)
-        meta["quality"] = quality
+    def generate_from_meta(self, input_meta):
+        output_meta = {}
+        if input_meta.get(Keys.QUALITY) is not None:
+            quality = input_meta.get(Keys.QUALITY)
+        else:
+            quality = np.random.randint(self.quality[0], self.quality[1] + 1)
+        output_meta[Keys.QUALITY] = quality
 
-        fg_color, fg_style, bg_color = self._generate_color()
-        fg_image, label, bboxes, glyph_fg_image, glyph_bboxes, text_meta = self._generate_text(
-            fg_color, fg_style
+        fg_color, fg_style, bg_color = self._generate_color(input_meta, output_meta)
+        fg_image, label, bboxes, glyph_fg_image, glyph_bboxes = self._generate_text(
+            fg_color, fg_style, input_meta=input_meta, meta=output_meta
         )
-        meta["text"] = text_meta
 
-        bg_image, background_meta = self._generate_background(fg_image.shape[:2][::-1], bg_color)
-        meta["background"] = background_meta
+        back_layer = layers.RectLayer(fg_image.shape[:2][::-1])
+        self.color.apply([back_layer], bg_color)
+        output_meta[Keys.BACK_TEXTURE] = self.texture.apply([back_layer], meta=input_meta.get(Keys.BACK_TEXTURE))
+        bg_image = back_layer.output()
 
-        image, blend_modes = _blend_images(fg_image, bg_image, self.visibility_check)
-        meta["blend_modes"] = blend_modes
+        image = _blend_images(fg_image, bg_image, self.visibility_check, input_meta, output_meta)
 
-        post_outs, post_meta = self._postprocess_images(
-            [image, fg_image, glyph_fg_image]
+        image, fg_image, glyph_fg_image = self._postprocess_images(
+            [image, fg_image, glyph_fg_image], input_meta, output_meta
         )
-        image, fg_image, glyph_fg_image = post_outs
-        meta["post_process"] = post_meta
 
-        data = {
+        return {
             "image": image,
             "label": label,
             "quality": quality,
@@ -129,10 +145,8 @@ class SynthTiger(templates.Template):
             "bboxes": bboxes,
             "glyph_mask": glyph_fg_image[..., 3],
             "glyph_bboxes": glyph_bboxes,
-            "meta": meta,
+            "meta": output_meta,
         }
-
-        return data
 
     def init_save(self, root):
         os.makedirs(root, exist_ok=True)
@@ -211,47 +225,56 @@ class SynthTiger(templates.Template):
         if self.glyph_coord_output:
             self.glyph_coords_file.close()
 
-    def _generate_color(self):
-        fg_style = self.style.sample()
+    def _generate_color(self, input_meta, output_meta):
+        fg_style = self.style.sample(meta=input_meta.get(Keys.FG_STYLE))
 
         if fg_style["state"]:
-            fg_color, bg_color, style_color = self.colormap3.sample()
+            output_meta[Keys.COLORMAP3] = self.colormap3.sample(meta=input_meta.get(Keys.COLORMAP3))
+            fg_color, bg_color, style_color = output_meta[Keys.COLORMAP3]
             fg_style["meta"]["meta"]["rgb"] = style_color["rgb"]
         else:
-            fg_color, bg_color = self.colormap2.sample()
+            output_meta[Keys.COLORMAP2] = self.colormap2.sample(meta=input_meta.get(Keys.COLORMAP2))
+            fg_color, bg_color = output_meta[Keys.COLORMAP2]
+
+        output_meta[Keys.FG_STYLE] = fg_style
 
         return fg_color, fg_style, bg_color
 
-    def _generate_text(self, color, style):
-        meta = {}
-        label = self.corpus.data(self.corpus.sample())
+    def _generate_text(self, color, style, input_meta, meta):
+        meta[Keys.CORPUS] = self.corpus.sample(meta=input_meta.get(Keys.CORPUS))
+        label = self.corpus.data(meta[Keys.CORPUS])
 
         # for script using diacritic, ligature and RTL
         chars = utils.split_text(label, reorder=True)
-
         text = "".join(chars)
-        font = self.font.sample({"text": text, "vertical": self.vertical})
-        meta["font"] = font
+
+        default_font_meta = {"text": text, "vertical": self.vertical}
+        if input_meta.get(Keys.FONT) is not None:
+            default_font_meta.update(input_meta.get(Keys.FONT))
+        font = self.font.sample(default_font_meta)
+        meta[Keys.FONT] = font
 
         char_layers = [layers.TextLayer(char, **font) for char in chars]
-        metas = []
-        metas.append(self.shape.apply(char_layers))
-        metas.append(self.layout.apply(char_layers, {"meta": {"vertical": self.vertical}}))
+
+        meta[Keys.SHAPE] = self.shape.apply(char_layers, meta=input_meta.get(Keys.SHAPE))
+        default_layout_meta = {"meta": {"vertical": self.vertical}}
+        if input_meta.get(Keys.LAYOUT) is not None:
+            default_layout_meta = input_meta.get(Keys.LAYOUT)
+        meta[Keys.LAYOUT] = self.layout.apply(char_layers, default_layout_meta)
         char_glyph_layers = [char_layer.copy() for char_layer in char_layers]
 
         text_layer = layers.Group(char_layers).merge()
         text_glyph_layer = text_layer.copy()
 
-        transform = self.transform.sample()
-        metas.append(self.color.apply([text_layer, text_glyph_layer], color))
-        metas.append(self.texture.apply([text_layer, text_glyph_layer]))
-        metas.append(self.style.apply([text_layer, *char_layers], style))
-        metas.append(self.transform.apply(
-            [text_layer, text_glyph_layer, *char_layers, *char_glyph_layers], transform
-        ))
-        metas.append(self.fit.apply([text_layer, text_glyph_layer, *char_layers, *char_glyph_layers]))
-        metas.append(self.pad.apply([text_layer]))
-        meta["applied"] = metas
+        self.color.apply([text_layer, text_glyph_layer], color)
+        meta[Keys.TEXTURE] = self.texture.apply([text_layer, text_glyph_layer], meta=input_meta.get(Keys.TEXTURE))
+        self.style.apply([text_layer, *char_layers], style)
+        meta[Keys.TRANSFORM] = self.transform.apply(
+            [text_layer, text_glyph_layer, *char_layers, *char_glyph_layers], meta=input_meta.get(Keys.TRANSFORM)
+        )
+        meta[Keys.FIT] = self.fit.apply([text_layer, text_glyph_layer, *char_layers, *char_glyph_layers],
+                                        meta=input_meta.get(Keys.FIT))
+        meta[Keys.PAD] = self.pad.apply([text_layer], meta=input_meta.get(Keys.PAD))
 
         for char_layer in char_layers:
             char_layer.topleft -= text_layer.topleft
@@ -264,25 +287,20 @@ class SynthTiger(templates.Template):
         glyph_out = text_glyph_layer.output(bbox=text_layer.bbox)
         glyph_bboxes = [char_glyph_layer.bbox for char_glyph_layer in char_glyph_layers]
 
-        return out, label, bboxes, glyph_out, glyph_bboxes, meta
+        return out, label, bboxes, glyph_out, glyph_bboxes
 
-    def _generate_background(self, size, color):
-        metas = []
-        layer = layers.RectLayer(size)
-        metas.append(self.color.apply([layer], color))
-        metas.append(self.texture.apply([layer]))
-        out = layer.output()
-        return out, metas
-
-    def _postprocess_images(self, images):
+    def _postprocess_images(self, images, input_meta, meta):
         image_layers = [layers.Layer(image) for image in images]
-        meta = self.postprocess.apply(image_layers)
-        outs = [image_layer.output() for image_layer in image_layers]
-        return outs, meta
+        meta[Keys.POST] = self.postprocess.apply(image_layers, input_meta.get(Keys.POST))
+        return [image_layer.output() for image_layer in image_layers]
 
 
-def _blend_images(src, dst, visibility_check=False):
-    blend_modes = np.random.permutation(BLEND_MODES)
+def _blend_images(src, dst, visibility_check, input_meta, meta):
+    if input_meta.get(Keys.BLEND) is not None:
+        blend_modes = input_meta.get(Keys.BLEND)
+    else:
+        blend_modes = np.random.permutation(BLEND_MODES)
+        blend_modes = blend_modes.tolist()
 
     for blend_mode in blend_modes:
         out = utils.blend_image(src, dst, mode=blend_mode)
@@ -290,8 +308,8 @@ def _blend_images(src, dst, visibility_check=False):
             break
     else:
         raise RuntimeError("Text is not visible")
-
-    return out, blend_modes.tolist()
+    meta[Keys.BLEND] = blend_modes
+    return out
 
 
 def _check_visibility(image, mask):
