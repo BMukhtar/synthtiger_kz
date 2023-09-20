@@ -1,26 +1,26 @@
 {
   "final_image_path": "images/0/0.jpg",
-  "label": "2% <тиет> тәйір шамдал",
-  "quality": 92,
+  "label": "турат",
+  "quality": 99,
   "colormap2": [
     {
       "name": "GrayMap",
-      "gray": 64,
+      "gray": 226,
       "rgb": [
-        109,
-        49,
-        23
+        244,
+        238,
+        117
       ],
       "alpha": 1.0,
       "colorize": true
     },
     {
       "name": "GrayMap",
-      "gray": 257,
+      "gray": 178,
       "rgb": [
-        143,
-        76,
-        1488
+        239,
+        136,
+        234
       ],
       "alpha": 1.0,
       "colorize": true
@@ -35,12 +35,12 @@
     "name": "Selector",
     "idx": 0,
     "meta": {
-      "text": "2% <тиет> тәйір шамдал"
+      "text": "турат"
     }
   },
   "font": {
-    "path": "resources/kz_fonts/RobotoMono-Italic.ttf",
-    "size": 35,
+    "path": "resources/kz_fonts/RobotoMono-Thin.ttf",
+    "size": 24,
     "bold": false,
     "vertical": false
   },
@@ -52,8 +52,8 @@
       "idx": 0,
       "meta": {
         "name": "ElasticDistortion",
-        "alpha": 16.334924769733078,
-        "sigma": 7.013936891178843
+        "alpha": 24.30601825081498,
+        "sigma": 7.196543743899241
       }
     }
   },
@@ -63,7 +63,7 @@
     "meta": {
       "name": "FlowLayout",
       "length": null,
-      "space": 1,
+      "space": 0,
       "line_space": 0,
       "align": "left",
       "line_align": "middle",
@@ -82,18 +82,12 @@
     "state": true,
     "meta": {
       "name": "Selector",
-      "idx": 0,
+      "idx": 4,
       "meta": {
-        "name": "Perspective",
-        "pxs": null,
-        "percents": [
-          0.9707224013606995,
-          1.0
-        ],
-        "aligns": [
-          0.0,
-          0.0
-        ]
+        "name": "Skew",
+        "axis": 0,
+        "angle": 24.381957905923986,
+        "ccw": false
       }
     }
   },
@@ -106,10 +100,10 @@
     "meta": {
       "name": "Pad",
       "pxs": [
-        4,
-        6,
-        9,
-        7
+        2,
+        0,
+        10,
+        0
       ],
       "percents": null,
       "mode": "constant",
@@ -120,29 +114,29 @@
     "name": "Switch",
     "state": true,
     "meta": {
-      "path": "resources/image/bedroom_83.jpg",
-      "alpha": 0.12627243675241895,
+      "path": "resources/image/bob+dylan_83.jpg",
+      "alpha": 0.02604917735005685,
       "grayscale": false,
       "crop": true,
-      "x": 120,
-      "y": 18,
-      "w": 175,
-      "h": 259
+      "x": 199,
+      "y": 97,
+      "w": 638,
+      "h": 227
     }
   },
   "blend": [
-    "normal",
-    "lighten_only",
     "addition",
-    "difference",
+    "lighten_only",
+    "normal",
+    "screen",
     "divide",
     "overlay",
-    "hard_light",
-    "multiply",
-    "screen",
-    "darken_only",
+    "difference",
+    "dodge",
     "soft_light",
-    "dodge"
+    "darken_only",
+    "hard_light",
+    "multiply"
   ],
   "post": {
     "name": "Iterator",
@@ -152,17 +146,14 @@
         "state": true,
         "meta": {
           "name": "AdditiveGaussianNoise",
-          "scale": 5.368426046921068,
+          "scale": 5.172680347041635,
           "per_channel": false
         }
       },
       {
         "name": "Switch",
-        "state": true,
-        "meta": {
-          "name": "GaussianBlur",
-          "sigma": 1
-        }
+        "state": false,
+        "meta": null
       },
       {
         "name": "Switch",
