@@ -56,11 +56,11 @@ shape:
     weights: [1, 1]
     args:
       # elastic distortion
-      - alpha: [15, 30]
-        sigma: [4, 12]
+      - alpha: [15, 25]
+        sigma: [8, 12]
       # elastic distortion
-      - alpha: [0, 2]
-        sigma: [0, 0.6]
+      - alpha: [1, 2]
+        sigma: [0.5, 1]
 
 layout:
   weights: [4, 1]

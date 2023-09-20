@@ -35,7 +35,6 @@ class Keys:
     FONT = 'font'
     CORPUS = "corpus"
     LAYOUT = 'layout'
-    TEXTURE = 'texture'
     TRANSFORM = 'transform'
     FIT = 'fit'
     PAD = 'pad'
@@ -267,7 +266,6 @@ class SynthTiger(templates.Template):
         text_glyph_layer = text_layer.copy()
 
         self.color.apply([text_layer, text_glyph_layer], color)
-        meta[Keys.TEXTURE] = self.texture.apply([text_layer, text_glyph_layer], meta=input_meta.get(Keys.TEXTURE))
         self.style.apply([text_layer, *char_layers], style)
         meta[Keys.TRANSFORM] = self.transform.apply(
             [text_layer, text_glyph_layer, *char_layers, *char_glyph_layers], meta=input_meta.get(Keys.TRANSFORM)

@@ -1,31 +1,7 @@
 {
-  "final_image_path": "images/0/7.jpg",
-  "label": "уқалаушы шалқию майлану",
+  "final_image_path": "images/0/5.jpg",
+  "label": "етектеу өзбекшеле",
   "quality": 99,
-  "colormap2": [
-    {
-      "name": "GrayMap",
-      "gray": 169,
-      "rgb": [
-        24,
-        243,
-        168
-      ],
-      "alpha": 1.0,
-      "colorize": true
-    },
-    {
-      "name": "GrayMap",
-      "gray": 22,
-      "rgb": [
-        61,
-        6,
-        2
-      ],
-      "alpha": 1.0,
-      "colorize": true
-    }
-  ],
   "fg_style": {
     "name": "Switch",
     "state": false,
@@ -35,12 +11,12 @@
     "name": "Selector",
     "idx": 0,
     "meta": {
-      "text": "уқалаушы шалқию майлану"
+      "text": "етектеу өзбекшеле"
     }
   },
   "font": {
-    "path": "resources/kz_fonts/RobotoMono-ThinItalic.ttf",
-    "size": 13,
+    "path": "resources/kz_fonts/Ubuntu-Regular.ttf",
+    "size": 11,
     "bold": false,
     "vertical": false
   },
@@ -49,11 +25,11 @@
     "state": true,
     "meta": {
       "name": "Selector",
-      "idx": 0,
+      "idx": 1,
       "meta": {
         "name": "ElasticDistortion",
-        "alpha": 21.30814854400893,
-        "sigma": 11.76505926015945
+        "alpha": 25,
+        "sigma": 8
       }
     }
   },
@@ -63,7 +39,7 @@
     "meta": {
       "name": "FlowLayout",
       "length": null,
-      "space": 1,
+      "space": 2,
       "line_space": 0,
       "align": "left",
       "line_align": "middle",
@@ -72,28 +48,16 @@
       "vertical": false
     }
   },
-  "texture": {
-    "name": "Switch",
-    "state": false,
-    "meta": null
-  },
   "transform": {
     "name": "Switch",
     "state": true,
     "meta": {
       "name": "Selector",
-      "idx": 1,
+      "idx": 6,
       "meta": {
-        "name": "Perspective",
-        "pxs": null,
-        "percents": [
-          1.0,
-          0.528827941892096
-        ],
-        "aligns": [
-          0.0,
-          0.0
-        ]
+        "name": "Rotate",
+        "angle": 1.9269744006159795,
+        "ccw": false
       }
     }
   },
@@ -102,14 +66,14 @@
   },
   "pad": {
     "name": "Switch",
-    "state": true,
+    "state": false,
     "meta": {
       "name": "Pad",
       "pxs": [
-        9,
-        9,
-        1,
-        0
+        7,
+        10,
+        4,
+        6
       ],
       "percents": null,
       "mode": "constant",
@@ -118,31 +82,22 @@
   },
   "back_texture": {
     "name": "Switch",
-    "state": true,
-    "meta": {
-      "path": "resources/image/crater_141.jpg",
-      "alpha": 0.5,
-      "grayscale": false,
-      "crop": true,
-      "x": 280,
-      "y": 260,
-      "w": 2594,
-      "h": 33
-    }
+    "state": false,
+    "meta": null
   },
   "blend": [
-    "normal",
-    "multiply",
-    "divide",
     "soft_light",
-    "hard_light",
-    "lighten_only",
-    "dodge",
+    "normal",
+    "screen",
     "darken_only",
     "overlay",
-    "difference",
-    "screen",
-    "addition"
+    "lighten_only",
+    "multiply",
+    "addition",
+    "dodge",
+    "hard_light",
+    "divide",
+    "difference"
   ],
   "post": {
     "name": "Iterator",
@@ -152,13 +107,17 @@
         "state": false,
         "meta": {
           "name": "AdditiveGaussianNoise",
-          "scale": 5.8308743005044334,
+          "scale": 5.802321737576213,
           "per_channel": false
         }
       },
       {
         "name": "Switch",
-        "state": false
+        "state": false,
+        "meta": {
+          "name": "GaussianBlur",
+          "sigma": 0
+        }
       },
       {
         "name": "Switch",
