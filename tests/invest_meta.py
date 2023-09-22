@@ -20,7 +20,6 @@ else:
     print("The last segment of the path is not 'synthtiger'")
     raise Exception("Directory mismatch!")
 
-
 import pprint
 
 import synthtiger
@@ -30,19 +29,25 @@ config_path = "./examples/custom/config_kz_no_augment.yaml"
 output_path = "./results/invest"
 input_meta_path = "./tests/input_meta.json"
 
-synthtiger.set_global_random_seed(seed=0)
 
-config = synthtiger.read_config(config_path)
-pprint.pprint(config)
-template = SynthTiger(config)
+def main():
+    synthtiger.set_global_random_seed(seed=0)
 
-# Open the JSON file for reading
-with open(input_meta_path, 'r') as json_file:
-    # Use json.load() to load the JSON data into a dictionary
-    input_meta = json.load(json_file)
-data = template.generate_from_meta(input_meta=input_meta)
+    config = synthtiger.read_config(config_path)
+    pprint.pprint(config)
+    template = SynthTiger(config)
 
-template.init_save(output_path)
-template.save(output_path, data, 0)
-template.end_save(output_path)
-print("End save")
+    # Open the JSON file for reading
+    with open(input_meta_path, 'r') as json_file:
+        # Use json.load() to load the JSON data into a dictionary
+        input_meta = json.load(json_file)
+    data = template.generate_from_meta(input_meta=input_meta)
+
+    template.init_save(output_path)
+    template.save(output_path, data, 0)
+    template.end_save(output_path)
+    print("End save")
+
+
+if __name__ == "__main__":
+    main()
