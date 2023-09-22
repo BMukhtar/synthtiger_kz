@@ -132,9 +132,11 @@ class SynthTiger(templates.Template):
 
         image = _blend_images(fg_image, bg_image, self.visibility_check, input_meta, output_meta)
 
-        image, fg_image, glyph_fg_image = self._postprocess_images(
-            [image, fg_image, glyph_fg_image], input_meta, output_meta
-        )
+        # ignore too small text, they are already blurred
+        if output_meta[Keys.FONT]['size'] > 20:
+            image, fg_image, glyph_fg_image = self._postprocess_images(
+                [image, fg_image, glyph_fg_image], input_meta, output_meta
+            )
 
         return {
             "image": image,

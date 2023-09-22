@@ -1,7 +1,31 @@
 {
-  "final_image_path": "images/0/5.jpg",
-  "label": "етектеу өзбекшеле",
-  "quality": 99,
+  "final_image_path": "images/0/9.jpg",
+  "label": "босқындат ойбайлауық",
+  "quality": 85,
+  "colormap2": [
+    {
+      "name": "GrayMap",
+      "gray": 95,
+      "rgb": [
+        206,
+        55,
+        10
+      ],
+      "alpha": 1.0,
+      "colorize": true
+    },
+    {
+      "name": "GrayMap",
+      "gray": 161,
+      "rgb": [
+        154,
+        183,
+        66
+      ],
+      "alpha": 1.0,
+      "colorize": true
+    }
+  ],
   "fg_style": {
     "name": "Switch",
     "state": false,
@@ -11,12 +35,12 @@
     "name": "Selector",
     "idx": 0,
     "meta": {
-      "text": "етектеу өзбекшеле"
+      "text": "босқындат ойбайлауық"
     }
   },
   "font": {
-    "path": "resources/kz_fonts/Ubuntu-Regular.ttf",
-    "size": 11,
+    "path": "resources/kz_fonts/timesnewromanpsmt.ttf",
+    "size": 13,
     "bold": false,
     "vertical": false
   },
@@ -25,26 +49,23 @@
     "state": true,
     "meta": {
       "name": "Selector",
-      "idx": 1,
+      "idx": 0,
       "meta": {
         "name": "ElasticDistortion",
-        "alpha": 25,
-        "sigma": 8
+        "alpha": 21.611514469217205,
+        "sigma": 13.17994398041721
       }
     }
   },
   "layout": {
     "name": "Selector",
-    "idx": 0,
+    "idx": 1,
     "meta": {
-      "name": "FlowLayout",
-      "length": null,
-      "space": 2,
-      "line_space": 0,
-      "align": "left",
-      "line_align": "middle",
-      "ltr": true,
-      "ttb": true,
+      "name": "CurveLayout",
+      "curve": 11,
+      "space": 4,
+      "convex": true,
+      "upward": false,
       "vertical": false
     }
   },
@@ -53,11 +74,13 @@
     "state": true,
     "meta": {
       "name": "Selector",
-      "idx": 6,
+      "idx": 2,
       "meta": {
-        "name": "Rotate",
-        "angle": 1.9269744006159795,
-        "ccw": false
+        "name": "Trapezoidate",
+        "side": 0,
+        "px": null,
+        "percent": 0.9187480010093314,
+        "align": -0.4168212560301203
       }
     }
   },
@@ -66,14 +89,14 @@
   },
   "pad": {
     "name": "Switch",
-    "state": false,
+    "state": true,
     "meta": {
       "name": "Pad",
       "pxs": [
-        7,
-        10,
+        3,
         4,
-        6
+        4,
+        3
       ],
       "percents": null,
       "mode": "constant",
@@ -86,37 +109,37 @@
     "meta": null
   },
   "blend": [
-    "soft_light",
-    "normal",
-    "screen",
-    "darken_only",
-    "overlay",
-    "lighten_only",
-    "multiply",
-    "addition",
-    "dodge",
     "hard_light",
-    "divide",
-    "difference"
+    "normal",
+    "lighten_only",
+    "addition",
+    "soft_light",
+    "darken_only",
+    "dodge",
+    "screen",
+    "overlay",
+    "difference",
+    "multiply",
+    "divide"
   ],
   "post": {
     "name": "Iterator",
     "metas": [
       {
         "name": "Switch",
-        "state": false,
+        "state": true,
         "meta": {
           "name": "AdditiveGaussianNoise",
-          "scale": 5.802321737576213,
+          "scale": 7.578565403098393,
           "per_channel": false
         }
       },
       {
         "name": "Switch",
-        "state": false,
+        "state": true,
         "meta": {
           "name": "GaussianBlur",
-          "sigma": 0
+          "sigma": 1
         }
       },
       {
@@ -127,10 +150,7 @@
       {
         "name": "Switch",
         "state": false,
-        "meta": {
-          "name": "MedianBlur",
-          "k": 1
-        }
+        "meta": null
       }
     ]
   }

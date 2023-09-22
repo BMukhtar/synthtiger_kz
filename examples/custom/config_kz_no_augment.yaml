@@ -57,7 +57,7 @@ shape:
     args:
       # elastic distortion
       - alpha: [15, 25]
-        sigma: [8, 12]
+        sigma: [12, 15]
       # elastic distortion
       - alpha: [1, 2]
         sigma: [0.5, 1]
