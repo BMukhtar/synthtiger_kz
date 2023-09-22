@@ -1,5 +1,8 @@
+import hashlib
 import json
 import os
+import random
+import uuid
 
 import cv2
 import numpy as np
@@ -113,7 +116,7 @@ class SynthTiger(templates.Template):
         return self.generate_from_meta(input_meta={})
 
     def generate_from_meta(self, input_meta):
-        output_meta = {}
+        output_meta = {'id': generate_id()}
         if input_meta.get(Keys.QUALITY) is not None:
             quality = input_meta.get(Keys.QUALITY)
         else:
@@ -364,3 +367,7 @@ def _create_poly_mask(image, pad=0):
     out = utils.create_image((width, height))
     out[..., 3] = mask
     return out
+
+
+def generate_id():
+    return str(uuid.uuid4())
