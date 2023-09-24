@@ -1,27 +1,27 @@
 {
-  "final_image_path": "images/0/1.jpg",
-  "label": "көшірмелерін құмалақ 1%",
-  "id": "c8bd8a8c-7584-4f58-93cf-d8fd13705914",
-  "quality": 82,
+  "final_image_path": "images/0/8.jpg",
+  "label": "имендір",
+  "id": "e6a1098b-7a12-4551-87ee-b3b8ea35d0af",
+  "quality": 94,
   "colormap2": [
     {
       "name": "GrayMap",
-      "gray": 119,
+      "gray": 34,
       "rgb": [
-        149,
-        92,
-        179
+        41,
+        35,
+        11
       ],
       "alpha": 1.0,
       "colorize": true
     },
     {
       "name": "GrayMap",
-      "gray": 203,
+      "gray": 98,
       "rgb": [
-        220,
-        193,
-        210
+        40,
+        138,
+        44
       ],
       "alpha": 1.0,
       "colorize": true
@@ -36,27 +36,37 @@
     "name": "Selector",
     "idx": 0,
     "meta": {
-      "text": "көшірмелерін құмалақ 1%"
+      "text": "имендір"
     }
   },
   "font": {
-    "path": "resources/kz_fonts/RobotoMono-Medium.ttf",
-    "size": 10,
+    "path": "resources/kz_fonts/UbuntuCondensed-Regular.ttf",
+    "size": 21,
     "bold": false,
     "vertical": false
   },
+  "shape": {
+    "name": "Switch",
+    "state": true,
+    "meta": {
+      "name": "Selector",
+      "idx": 1,
+      "meta": {
+        "name": "ElasticDistortion",
+        "alpha": 1.619725332616478,
+        "sigma": 0.942167690834457
+      }
+    }
+  },
   "layout": {
     "name": "Selector",
-    "idx": 0,
+    "idx": 1,
     "meta": {
-      "name": "FlowLayout",
-      "length": null,
+      "name": "CurveLayout",
+      "curve": 14,
       "space": 1,
-      "line_space": 0,
-      "align": "left",
-      "line_align": "middle",
-      "ltr": true,
-      "ttb": true,
+      "convex": true,
+      "upward": false,
       "vertical": false
     }
   },
@@ -65,13 +75,12 @@
     "state": true,
     "meta": {
       "name": "Selector",
-      "idx": 3,
+      "idx": 4,
       "meta": {
-        "name": "Trapezoidate",
-        "side": 3,
-        "px": null,
-        "percent": 0.8056023267370692,
-        "align": -0.09049891922681819
+        "name": "Skew",
+        "axis": 0,
+        "angle": 15.404482148950887,
+        "ccw": true
       }
     }
   },
@@ -84,10 +93,10 @@
     "meta": {
       "name": "Pad",
       "pxs": [
-        0,
+        8,
+        1,
         9,
-        6,
-        0
+        5
       ],
       "percents": null,
       "mode": "constant",
@@ -100,17 +109,55 @@
     "meta": null
   },
   "blend": [
-    "addition",
-    "screen",
+    "overlay",
+    "divide",
     "normal",
     "dodge",
-    "difference",
-    "multiply",
-    "hard_light",
-    "overlay",
-    "lighten_only",
-    "divide",
+    "screen",
     "darken_only",
-    "soft_light"
-  ]
+    "lighten_only",
+    "hard_light",
+    "addition",
+    "soft_light",
+    "multiply",
+    "difference"
+  ],
+  "post": {
+    "name": "Iterator",
+    "metas": [
+      {
+        "name": "Switch",
+        "state": true,
+        "meta": {
+          "name": "AdditiveGaussianNoise",
+          "scale": 3,
+          "per_channel": false
+        }
+      },
+      {
+        "name": "Switch",
+        "state": true,
+        "meta": {
+          "name": "GaussianBlur",
+          "sigma": 1.0
+        }
+      },
+      {
+        "name": "Switch",
+        "state": true,
+        "meta": {
+          "name": "Resample",
+          "size": 0.7
+        }
+      },
+      {
+        "name": "Switch",
+        "state": true,
+        "meta": {
+          "name": "MedianBlur",
+          "k": 1
+        }
+      }
+    ]
+  }
 }

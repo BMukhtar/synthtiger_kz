@@ -260,7 +260,9 @@ class SynthTiger(templates.Template):
 
         char_layers = [layers.TextLayer(char, **font) for char in chars]
 
-        if font['size'] > 20:
+        is_large_font = font['size'] > 20
+
+        if is_large_font:
             meta[Keys.SHAPE] = self.shape.apply(char_layers, meta=input_meta.get(Keys.SHAPE))
         default_layout_meta = {"meta": {"vertical": self.vertical}}
         if input_meta.get(Keys.LAYOUT) is not None:
@@ -272,7 +274,8 @@ class SynthTiger(templates.Template):
         text_glyph_layer = text_layer.copy()
 
         self.color.apply([text_layer, text_glyph_layer], color)
-        self.style.apply([text_layer, *char_layers], style)
+        if is_large_font:
+            self.style.apply([text_layer, *char_layers], style)
         meta[Keys.TRANSFORM] = self.transform.apply(
             [text_layer, text_glyph_layer, *char_layers, *char_glyph_layers], meta=input_meta.get(Keys.TRANSFORM)
         )
