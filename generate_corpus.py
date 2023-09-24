@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 # Define the symbols
 afterword_symbols = "!?.,:;"
 numbers = "0123456789"
-other_symbols = "'#()<>+-/*=%$"
+other_symbols = "'#()<>+-/*=%$»«"
 space_symbol = ' '
 all_letters = 'АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯЁабвгдежзийклмнопрстуфхцчшщъыьэюяёӘҒҚҢӨҰҮІҺәғқңөұүіһ'
 all_symbols = numbers + afterword_symbols + other_symbols + space_symbol + all_letters
@@ -59,8 +59,11 @@ def get_random_number():
 
 
 def handle_math_expression():
-    return space_symbol + get_scaled_number() + random.choice(
-        ["+", "-", '/', '*']) + get_scaled_number() + "=" + get_scaled_number()
+    return (space_symbol + get_scaled_number()
+            + random.choice(["+", "-", '/', '*'])
+            + get_scaled_number()
+            + random.choice(["=", ">", "<"])
+            + get_scaled_number())
 
 
 def handle_hashtag():
@@ -79,18 +82,26 @@ def handle_date():
 def handle_time():
     return str(random.randint(1, 24)) + ':' + str(random.randint(1, 59))
 
+def get_random_word():
+    word = random.choice(words)
+    n = random.random()
+    if n < 0.1:
+        return word.capitalize()
+    elif n < 0.2:
+        return word.upper()
+    return word
 
 def handle_other():
     n = random.randint(1, 10)
     if n == 1:
         return handle_hashtag()
     if n == 2:
-        return random.choice(["(", ""]) + random.choice(words) + random.choice([")", ""])
+        return random.choice(["(", ""]) + get_random_word() + random.choice([")", ""])
     if n == 3:
-        return "<" + random.choice(words) + ">"
+        return "«" + get_random_word() + "»"
     if n == 4:
         tik = random.choice(["'", "''"])
-        return tik + random.choice(words) + tik
+        return tik + get_random_word() + tik
     if n == 5:
         return random.choice(words) + "-"
     if n == 6:
@@ -105,9 +116,8 @@ def handle_other():
         return "т.б."
 
 def get_candidate() -> str:
-    word = random.choice(words)
     if random.random() < 0.8:
-        return word
+        return get_random_word()
 
     choice = random.random()
     # Append a special symbol
