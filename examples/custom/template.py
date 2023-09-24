@@ -260,7 +260,8 @@ class SynthTiger(templates.Template):
 
         char_layers = [layers.TextLayer(char, **font) for char in chars]
 
-        meta[Keys.SHAPE] = self.shape.apply(char_layers, meta=input_meta.get(Keys.SHAPE))
+        if font['size'] > 20:
+            meta[Keys.SHAPE] = self.shape.apply(char_layers, meta=input_meta.get(Keys.SHAPE))
         default_layout_meta = {"meta": {"vertical": self.vertical}}
         if input_meta.get(Keys.LAYOUT) is not None:
             default_layout_meta = input_meta.get(Keys.LAYOUT)

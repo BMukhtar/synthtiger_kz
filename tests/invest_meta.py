@@ -2,23 +2,23 @@ import os
 
 from examples.custom.template import SynthTiger
 
-# Define the new directory you want to change to
-new_directory = '../.'
-
-# Get the absolute path
-abs_directory = os.path.abspath(new_directory)
-
-# Check if the last segment of the path is 'synthtiger'
-if os.path.basename(abs_directory) == 'synthtiger':
-    # Change the current working directory
-    os.chdir(new_directory)
-    # Print the current working directory to verify the change
-    print(os.getcwd())
-elif os.path.basename(os.path.abspath("./")) == 'synthtiger':
-    print("All fine no need to change")
-else:
-    print("The last segment of the path is not 'synthtiger'")
-    raise Exception("Directory mismatch!")
+# # Define the new directory you want to change to
+# new_directory = '../.'
+#
+# # Get the absolute path
+# abs_directory = os.path.abspath(new_directory)
+#
+# # Check if the last segment of the path is 'synthtiger'
+# if os.path.basename(abs_directory) == 'synthtiger':
+#     # Change the current working directory
+#     os.chdir(new_directory)
+#     # Print the current working directory to verify the change
+#     print(os.getcwd())
+# elif os.path.basename(os.path.abspath("./")) == 'synthtiger':
+#     print("All fine no need to change")
+# else:
+#     print("The last segment of the path is not 'synthtiger'")
+#     raise Exception("Directory mismatch!")
 
 import pprint
 
