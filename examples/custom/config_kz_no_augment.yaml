@@ -19,7 +19,7 @@ corpus:
 font:
   paths: [resources/kz_fonts]
   weights: [1]
-  size: [10, 80]
+  size: [10, 11]
   bold: 0
 
 texture:
@@ -90,18 +90,18 @@ transform:
     weights: [1, 1, 1, 1, 1, 1, 2]
     args:
       # perspective x
-      - percents: [[0.5, 1], [1, 1]]
+      - percents: [[0.8, 1], [1, 1]]
         aligns: [[0, 0], [0, 0]]
       # perspective y
-      - percents: [[1, 1], [0.5, 1]]
+      - percents: [[1, 1], [0.8, 1]]
         aligns: [[0, 0], [0, 0]]
       # trapezoidate x
       - weights: [1, 0, 1, 0]
-        percent: [0.75, 1]
+        percent: [0.8, 1]
         align: [-1, 1]
       # trapezoidate y
       - weights: [0, 1, 0, 1]
-        percent: [0.5, 1]
+        percent: [0.75, 1]
         align: [-1, 1]
       # skew x
       - weights: [1, 0]
