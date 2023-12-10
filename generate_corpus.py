@@ -7,7 +7,7 @@ afterword_symbols = "!?.,:;"
 numbers = "0123456789"
 other_symbols = "'#()<>+-/*=%$»«"
 space_symbol = ' '
-all_letters = 'АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯЁабвгдежзийклмнопрстуфхцчшщъыьэюяёӘҒҚҢӨҰҮІҺәғқңөұүіһ'
+all_letters = 'АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯЁабвгдежзийклмнопрстуфхцчшщъыьэюяёӘҒҚҢӨҰҮІҺәғқңөұүіһABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
 all_symbols = numbers + afterword_symbols + other_symbols + space_symbol + all_letters
 print(all_symbols)
 
@@ -22,8 +22,25 @@ char_counts = {char: 1 for char in all_symbols}
 with open('resources/corpus/kk_dict.txt', 'r', encoding='utf-8') as f:
     words = f.read().splitlines()
 
+# Read words from kk_dict.txt
+with open('resources/corpus/mjsynth.txt', 'r', encoding='utf-8') as f:
+    english_words = f.read().splitlines()
+
+
 # Filter out words that use different symbols
 words = [word for word in words if all(char in char_counts for char in word)]
+
+# Filter out words that use different symbols
+english_words = [word for word in english_words if all(char in char_counts for char in word)]
+
+def handle_english_word():
+    word = random.choice(english_words)
+    n = random.random()
+    if n < 0.1:
+        return word.capitalize()
+    elif n < 0.2:
+        return word.upper()
+    return word
 
 def handle_less_frequent_letters():
     # Filter out lowercase letters from char_counts
@@ -131,6 +148,8 @@ def get_candidate() -> str:
         return handle_math_expression()
     elif choice < 0.6:
         return handle_less_frequent_letters()
+    elif choice < 0.7:
+        return handle_english_word()
     # Append other symbols
     else:
         return handle_other()
