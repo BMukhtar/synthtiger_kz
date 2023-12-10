@@ -7,7 +7,9 @@ afterword_symbols = "!?.,:;"
 numbers = "0123456789"
 other_symbols = "'#()<>+-/*=%$»«"
 space_symbol = ' '
-all_letters = 'АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯЁабвгдежзийклмнопрстуфхцчшщъыьэюяёӘҒҚҢӨҰҮІҺәғқңөұүіһABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+kazakh_letters = 'АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯЁабвгдежзийклмнопрстуфхцчшщъыьэюяёӘҒҚҢӨҰҮІҺәғқңөұүіһ'
+english_letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+all_letters = kazakh_letters + english_letters
 all_symbols = numbers + afterword_symbols + other_symbols + space_symbol + all_letters
 print(all_symbols)
 
@@ -33,6 +35,65 @@ words = [word for word in words if all(char in char_counts for char in word)]
 # Filter out words that use different symbols
 english_words = [word for word in english_words if all(char in char_counts for char in word)]
 
+all_words = words + english_words
+
+def main():
+    # Generate corpus
+    corpus = []
+    for i in range(word_count):  # Adjust the range as needed
+        sequence = ''
+        target_length = max_n
+        remaining_words = random.randint(1, 4)
+
+        while len(sequence) < target_length:
+            # Append a special symbol
+            candidate = space_symbol + get_candidate()
+            if len(sequence + candidate) > target_length:
+                break
+
+            sequence = sequence + candidate
+
+            # Trim sequence if it exceeds target length
+            sequence = sequence[:target_length]
+            remaining_words -= 1
+            if remaining_words <= 0:
+                break
+
+        if random.random() < 0.2:
+            sequence = sequence.capitalize()
+
+        if len(sequence) > 0:
+            sequence = sequence.strip()
+        for char in sequence:
+            char_counts[char] += 1
+        corpus.append(sequence)
+
+    # Write corpus to corpus.txt
+    path = "./resources/corpus/kz_corpus_generated.txt"
+    with open(path, 'w', encoding='utf-8') as f:
+        for sequence in corpus:
+            f.write(sequence + '\n')
+
+    print(f'Corpus generated and written to {path}')
+
+def build_inverted_index(words, all_letters):
+    # Initialize the inverted index
+    inverted_index = {char: [] for char in all_letters if char == char.lower()}
+
+    # Populate the inverted index
+    for word in all_words:
+        word = word.lower()
+        for char in set(word):  # Use set to avoid duplicate entries for the same word
+            if char in inverted_index:
+                inverted_index[char].append(word)
+
+    # remove empty entries
+    inverted_index = {char: words for char, words in inverted_index.items() if len(words) > 0}
+    return inverted_index
+
+# Build the inverted index
+inverted_index = build_inverted_index(words, all_letters)
+
 def handle_english_word():
     word = random.choice(english_words)
     n = random.random()
@@ -42,22 +103,29 @@ def handle_english_word():
         return word.upper()
     return word
 
+def get_least_frequent_chars(char_counts, all_letters, threshold=10):
+
+    # unite upper and lower case counts
+    united_counts = {}
+    for char, count in char_counts.items():
+        if char.lower() in united_counts:
+            united_counts[char.lower()] += count
+        else:
+            united_counts[char.lower()] = count
+
+    # get sorted list of chars by count
+    sorted_chars = sorted(united_counts.items(), key=lambda x: x[1])
+
+    return [char for char, count in sorted_chars if char in all_letters and char in inverted_index][:threshold]
+
+
 def handle_less_frequent_letters():
-    # Filter out lowercase letters from char_counts
-    chars = set([l.lower() for l in all_letters])
-    lowercase_counts = {k: v for k, v in char_counts.items() if k in chars}
-
-    # Sort the dictionary by frequency (value), and take the 10 less frequent lowercase letters
-    sorted_counts = sorted(lowercase_counts.items(), key=lambda x: x[1])
-    least_frequent_chars = [char for char, count in sorted_counts[:10]]
-
-    # Generate a random word length between 3 and 10
-    word_length = random.randint(3, 10)
-
-    # Create the word by randomly selecting characters from the least_frequent_chars list
-    word = ''.join(random.choice(least_frequent_chars) for _ in range(word_length))
-
-    return word
+    least_frequent_chars = get_least_frequent_chars(char_counts, all_letters)
+    # Randomly select a less frequent character
+    char = random.choice(least_frequent_chars)
+    
+    # Randomly select a word from the list of words containing this character
+    return random.choice(inverted_index[char])
 
 def get_scaled_number(min = 1, max = 100_000):
     log_rand = random.uniform(math.log(min), math.log(max))
@@ -153,46 +221,6 @@ def get_candidate() -> str:
     # Append other symbols
     else:
         return handle_other()
-
-
-def main():
-    # Generate corpus
-    corpus = []
-    for i in range(word_count):  # Adjust the range as needed
-        sequence = ''
-        target_length = max_n
-        remaining_words = random.randint(1, 4)
-
-        while len(sequence) < target_length:
-            # Append a special symbol
-            candidate = space_symbol + get_candidate()
-            if len(sequence + candidate) > target_length:
-                break
-
-            sequence = sequence + candidate
-
-            # Trim sequence if it exceeds target length
-            sequence = sequence[:target_length]
-            remaining_words -= 1
-            if remaining_words <= 0:
-                break
-
-        if random.random() < 0.2:
-            sequence = sequence.capitalize()
-
-        if len(sequence) > 0:
-            sequence = sequence.strip()
-        for char in sequence:
-            char_counts[char] += 1
-        corpus.append(sequence)
-
-    # Write corpus to corpus.txt
-    path = "./resources/corpus/kz_corpus_generated.txt"
-    with open(path, 'w', encoding='utf-8') as f:
-        for sequence in corpus:
-            f.write(sequence + '\n')
-
-    print(f'Corpus generated and written to {path}')
 
 
 if __name__ == "__main__":
