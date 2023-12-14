@@ -1,0 +1,144 @@
+{
+    "final_image_path": "images/16/166464.jpg",
+    "label": "МӘУЛІТ сатырлауық 4335.3",
+    "id": "d7f3d9cb-216b-4d65-9f80-512375c14aa8",
+    "quality": 77,
+    "colormap2": [
+        {
+            "gray": 53,
+            "rgb": [
+                0,
+                52,
+                197
+            ],
+            "alpha": 1.0,
+            "colorize": true
+        },
+        {
+            "gray": 178,
+            "rgb": [
+                98,
+                246,
+                38
+            ],
+            "alpha": 1.0,
+            "colorize": true
+        }
+    ],
+    "fg_style": {
+        "state": false,
+        "meta": null
+    },
+    "corpus": {
+        "idx": 0,
+        "meta": {
+            "text": "МӘУЛІТ сатырлауық 4335.3"
+        }
+    },
+    "font": {
+        "path": "resources/kz_fonts/RobotoMono-Regular.ttf",
+        "size": 26,
+        "bold": false,
+        "vertical": false
+    },
+    "shape": {
+        "state": true,
+        "meta": {
+            "idx": 0,
+            "meta": {
+                "alpha": 16.963679946241406,
+                "sigma": 12.320557812466463
+            }
+        }
+    },
+    "layout": {
+        "idx": 0,
+        "meta": {
+            "length": null,
+            "space": 3,
+            "line_space": 0,
+            "align": "left",
+            "line_align": "middle",
+            "ltr": true,
+            "ttb": true,
+            "vertical": false
+        }
+    },
+    "transform": {
+        "state": true,
+        "meta": {
+            "idx": 1,
+            "meta": {
+                "pxs": null,
+                "percents": [
+                    1.0,
+                    0.8842174820403919
+                ],
+                "aligns": [
+                    0.0,
+                    0.0
+                ]
+            }
+        }
+    },
+    "fit": {},
+    "pad": {
+        "state": true,
+        "meta": {
+            "pxs": [
+                3,
+                6,
+                0,
+                5
+            ],
+            "percents": null,
+            "mode": "constant",
+            "value": 0
+        }
+    },
+    "back_texture": {
+        "state": false,
+        "meta": null
+    },
+    "blend": [
+        "darken_only",
+        "overlay",
+        "dodge",
+        "normal",
+        "addition",
+        "difference",
+        "multiply",
+        "soft_light",
+        "hard_light",
+        "lighten_only",
+        "divide",
+        "screen"
+    ],
+    "post": {
+        "metas": [
+            {
+                "state": true,
+                "meta": {
+                    "scale": 2.809982242804355,
+                    "per_channel": false
+                }
+            },
+            {
+                "state": true,
+                "meta": {
+                    "sigma": 1
+                }
+            },
+            {
+                "state": false,
+                "meta": null
+            },
+            {
+                "state": true,
+                "meta": {
+                    "k": 1
+                }
+            }
+        ]
+    }
+}

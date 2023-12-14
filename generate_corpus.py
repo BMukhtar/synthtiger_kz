@@ -120,7 +120,12 @@ def get_least_frequent_chars(char_counts, all_letters, threshold=10):
 
 
 def handle_less_frequent_letters():
-    least_frequent_chars = get_least_frequent_chars(char_counts, all_letters)
+    # choose letters type: english or kazakh with 0.5 probability
+    if random.random() < 0.5:
+        sample = english_letters
+    else:
+        sample = kazakh_letters
+    least_frequent_chars = get_least_frequent_chars(char_counts, sample)
     # Randomly select a less frequent character
     char = random.choice(least_frequent_chars)
     
