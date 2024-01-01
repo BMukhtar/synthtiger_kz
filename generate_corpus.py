@@ -211,7 +211,7 @@ def get_candidate() -> str:
 
     choice = random.random()
     # Append a special symbol
-    if choice < 0.2:
+    if choice < 0.3:
         return random.choice(words) + random.choice(afterword_symbols)
     # Append a number
     elif choice < 0.4:

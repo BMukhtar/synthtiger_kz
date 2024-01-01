@@ -19,7 +19,7 @@ corpus:
 font:
   paths: [resources/kz_fonts]
   weights: [1]
-  size: [10, 60]
+  size: [10, 40]
   bold: 0
 
 texture:
