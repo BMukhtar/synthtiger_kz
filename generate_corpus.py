@@ -5,7 +5,9 @@ from datetime import datetime, timedelta
 # Define the symbols
 afterword_symbols = "!?.,:;"
 numbers = "0123456789"
-other_symbols = "'#()<>+-/*=%$»«"
+other_symbols = """
+    '#()<>+-/*=%$»«"
+""".strip()
 space_symbol = ' '
 kazakh_letters = 'АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯЁабвгдежзийклмнопрстуфхцчшщъыьэюяёӘҒҚҢӨҰҮІҺәғқңөұүіһ'
 english_letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
