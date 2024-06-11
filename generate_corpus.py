@@ -17,7 +17,7 @@ print(all_symbols)
 
 # Define maximum and minimum sequence length
 max_n = 25
-word_count = 1_000_000
+word_count = 1_000
 
 # Initialize character counts
 char_counts = {char: 1 for char in all_symbols}
