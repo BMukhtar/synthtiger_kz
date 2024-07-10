@@ -27,8 +27,8 @@ def convert(root):
         json.dump(d, f, ensure_ascii=False)
 
 def main():
-    convert(f'{gt_dir}/train_v10')
-    convert(f'{gt_dir}/test_v10')
+    convert(f'{gt_dir}/train_v11')
+    # convert(f'{gt_dir}/test_v10')
 
 
 if __name__ == '__main__':
