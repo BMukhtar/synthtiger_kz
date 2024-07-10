@@ -1,13 +1,13 @@
 import random
 import math
 from datetime import datetime, timedelta
+import string
+from typing import Dict
 
 # Define the symbols
 afterword_symbols = "!?.,:;"
 numbers = "0123456789"
-other_symbols = """
-    '#()<>+-/*=%$»«"
-""".strip()
+other_symbols = string.punctuation + "«»"
 space_symbol = ' '
 kazakh_letters = 'АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯЁабвгдежзийклмнопрстуфхцчшщъыьэюяёӘҒҚҢӨҰҮІҺәғқңөұүіһ'
 english_letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
@@ -15,9 +15,21 @@ all_letters = kazakh_letters + english_letters
 all_symbols = numbers + afterword_symbols + other_symbols + space_symbol + all_letters
 print(all_symbols)
 
+VOCABS: Dict[str, str] = {
+    "digits": string.digits,
+    "ascii_letters": string.ascii_letters,
+    "punctuation": string.punctuation + "«»",
+    "currency": "£€¥¢฿",
+}
+
+VOCABS["latin"] = VOCABS["digits"] + VOCABS["ascii_letters"] + VOCABS["punctuation"]
+VOCABS["english"] = VOCABS["latin"] + "°" + VOCABS["currency"]
+VOCABS["russian"] = VOCABS["english"] + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
+VOCABS["kazakh"] = VOCABS["russian"] + "әіңғүұқөһӘІҢҒҮҰҚӨҺ"
+
 # Define maximum and minimum sequence length
 max_n = 25
-word_count = 1_000
+word_count = 10_000
 
 # Initialize character counts
 char_counts = {char: 1 for char in all_symbols}
@@ -31,13 +43,20 @@ with open('resources/corpus/mjsynth.txt', 'r', encoding='utf-8') as f:
     english_words = f.read().splitlines()
 
 
+# Read words from kk_dict.txt
+with open('resources/corpus/russian.txt', 'r', encoding='utf-8') as f:
+    russian_words = f.read().splitlines()
+
 # Filter out words that use different symbols
 words = [word for word in words if all(char in char_counts for char in word)]
 
 # Filter out words that use different symbols
 english_words = [word for word in english_words if all(char in char_counts for char in word)]
 
-all_words = words + english_words
+# Filter out words that use different symbols
+russian_words = [word for word in russian_words if all(char in char_counts for char in word)]
+
+all_words = words + english_words + russian_words
 
 def main():
     # Generate corpus
@@ -175,7 +194,7 @@ def handle_time():
     return str(random.randint(1, 24)) + ':' + str(random.randint(1, 59))
 
 def get_random_word():
-    word = random.choice(words)
+    word = random.choice(all_words)
     n = random.random()
     if n < 0.1:
         return word.capitalize()
@@ -223,8 +242,8 @@ def get_candidate() -> str:
         return handle_math_expression()
     elif choice < 0.6:
         return handle_less_frequent_letters()
-    elif choice < 0.7:
-        return handle_english_word()
+    # elif choice < 0.7:
+    #     return handle_english_word()
     # Append other symbols
     else:
         return handle_other()
