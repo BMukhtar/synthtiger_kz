@@ -7,29 +7,18 @@ from typing import Dict
 # Define the symbols
 afterword_symbols = "!?.,:;"
 numbers = "0123456789"
-other_symbols = string.punctuation + "«»"
+other_symbols = string.punctuation + "«»…£€¥№°—"
 space_symbol = ' '
 kazakh_letters = 'АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯЁабвгдежзийклмнопрстуфхцчшщъыьэюяёӘҒҚҢӨҰҮІҺәғқңөұүіһ'
 english_letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
 all_letters = kazakh_letters + english_letters
-all_symbols = numbers + afterword_symbols + other_symbols + space_symbol + all_letters
+all_symbols = numbers + other_symbols + space_symbol + all_letters
+assert len(all_symbols) == len(set(all_symbols))
 print(all_symbols)
 
-VOCABS: Dict[str, str] = {
-    "digits": string.digits,
-    "ascii_letters": string.ascii_letters,
-    "punctuation": string.punctuation + "«»",
-    "currency": "£€¥¢฿",
-}
-
-VOCABS["latin"] = VOCABS["digits"] + VOCABS["ascii_letters"] + VOCABS["punctuation"]
-VOCABS["english"] = VOCABS["latin"] + "°" + VOCABS["currency"]
-VOCABS["russian"] = VOCABS["english"] + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
-VOCABS["kazakh"] = VOCABS["russian"] + "әіңғүұқөһӘІҢҒҮҰҚӨҺ"
-
 # Define maximum and minimum sequence length
-max_n = 25
-word_count = 10_000
+max_n = 50
+word_count = 1_000_000
 
 # Initialize character counts
 char_counts = {char: 1 for char in all_symbols}
@@ -64,7 +53,8 @@ def main():
     for i in range(word_count):  # Adjust the range as needed
         sequence = ''
         target_length = max_n
-        remaining_words = random.randint(1, 4)
+        # give more priority to less words
+        remaining_words = random.choice([1, 1, 1, 1, 2, 2, 3, 4])
 
         while len(sequence) < target_length:
             # Append a special symbol
@@ -202,6 +192,10 @@ def get_random_word():
         return word.upper()
     return word
 
+def handle_random_symbol():
+    filtered = other_symbols.replace("\\", "")
+    return random.choice([random.choice(words), "", "", ""]) + random.choice(filtered)
+
 def handle_other():
     n = random.randint(1, 10)
     if n == 1:
@@ -242,8 +236,8 @@ def get_candidate() -> str:
         return handle_math_expression()
     elif choice < 0.6:
         return handle_less_frequent_letters()
-    # elif choice < 0.7:
-    #     return handle_english_word()
+    elif choice < 0.7:
+        return handle_random_symbol()
     # Append other symbols
     else:
         return handle_other()

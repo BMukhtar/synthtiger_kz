@@ -48,10 +48,10 @@ class SynthTiger(templates.Template):
         if config is None:
             config = {}
 
-        self.coord_output = config.get("coord_output", True)
-        self.mask_output = config.get("mask_output", True)
-        self.glyph_coord_output = config.get("glyph_coord_output", True)
-        self.glyph_mask_output = config.get("glyph_mask_output", True)
+        self.coord_output = config.get("coord_output", False)
+        self.mask_output = config.get("mask_output", False)
+        self.glyph_coord_output = config.get("glyph_coord_output", False)
+        self.glyph_mask_output = config.get("glyph_mask_output", False)
         self.vertical = config.get("vertical", False)
         self.quality = config.get("quality", [95, 95])
         self.visibility_check = config.get("visibility_check", False)

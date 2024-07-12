@@ -109,6 +109,9 @@ synthtiger -c 2000 -o ./results/test_v7 -w 40 -v examples/custom/template.py Syn
 
 python synthtiger/main.py -c 1000000 -o ./results/train_v11 -w 20 -v examples/custom/template.py SynthTiger examples/custom/config_kz_no_augment.yaml
 python synthtiger/main.py -c 2000 -o ./results/test_v11 -w 40 -v examples/custom/template.py SynthTiger examples/custom/config_kz_no_augment.yaml
+
+python synthtiger/main.py -c 200000 -o ./results/train_v12 -w 20 -v examples/custom/template.py SynthTiger examples/custom/config_kz_no_augment.yaml
+python synthtiger/main.py -c 2000 -o ./results/test_v12 -w 40 -v examples/custom/template.py SynthTiger examples/custom/config_kz_no_augment.yaml
 ```
 
 <p>

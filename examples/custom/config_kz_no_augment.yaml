@@ -1,7 +1,7 @@
-coord_output: true
-mask_output: true
-glyph_coord_output: true
-glyph_mask_output: true
+coord_output: false
+mask_output: false
+glyph_coord_output: false
+glyph_mask_output: false
 
 vertical: false
 quality: [70, 99]
