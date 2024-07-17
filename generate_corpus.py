@@ -17,7 +17,7 @@ assert len(all_symbols) == len(set(all_symbols))
 print(all_symbols)
 
 # Define maximum and minimum sequence length
-max_n = 50
+max_n = 40
 word_count = 1_000_000
 
 # Initialize character counts
@@ -54,7 +54,7 @@ def main():
         sequence = ''
         target_length = max_n
         # give more priority to less words
-        remaining_words = random.choice([1, 1, 1, 1, 2, 2, 3, 4])
+        remaining_words = random.choice([1, 1, 1, 1, 1, 2])
 
         while len(sequence) < target_length:
             # Append a special symbol
