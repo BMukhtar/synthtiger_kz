@@ -105,6 +105,56 @@ def build_inverted_index(words, all_letters):
 # Build the inverted index
 inverted_index = build_inverted_index(words, all_letters)
 
+def get_banking_related_number():
+    """Generate a random banking-related number with various banking formats."""
+    
+    currencies = ["$", "€", "₸", "₽", "£", "¥"]  # Dollar, Euro, Tenge, Ruble, Pound, Yen
+    currency_names = ["USD", "EUR", "KZT", "RUB", "GBP", "JPY"]
+
+    banking_formats = [
+        # Card number format (XXXX XXXX XXXX XXXX)
+        lambda: f"{get_scaled_number(1000, 9999)} {get_scaled_number(1000, 9999)} {get_scaled_number(1000, 9999)} {get_scaled_number(1000, 9999)}",
+        
+        # IBAN format (IBAN XXXX XXXX XXXX XXXX)
+        lambda: f"IBAN {get_scaled_number(1000, 9999)} {get_scaled_number(1000, 9999)} {get_scaled_number(1000, 9999)} {get_scaled_number(1000, 9999)}",
+        
+        # Account number format (8 to 12 digits)
+        lambda: f"{get_scaled_number(10000000, 999999999999)}",
+        
+        # Currency formats with different symbols (e.g., $1,234.56, €567.89)
+        lambda: f"{random.choice(currencies)}{get_scaled_number(100, 1000000):,}.{random.randint(0, 99):02d}",  # Currency with symbol
+        lambda: f"{get_scaled_number(100, 1000000):,} {random.choice(currency_names)}",  # Currency with name
+        
+        # Percentage format (interest rates or other percentages)
+        lambda: f"{random.randint(1, 100)}%",
+        
+        # Loan or balance amounts (e.g., $10,000.00 or €500,000.00)
+        lambda: f"{random.choice(currencies)}{get_scaled_number(1000, 1000000):,}.{random.randint(0, 99):02d}",
+        
+        # Transaction or reference ID formats (XXX-XXXX-XXX-XXXX)
+        lambda: f"{random.randint(100, 999)}-{random.randint(1000, 9999)}-{random.randint(100, 999)}-{random.randint(1000, 9999)}",
+        
+        # SWIFT/BIC code format (8 to 11 alphanumeric characters)
+        lambda: ''.join(random.choices(string.ascii_uppercase + string.digits, k=random.choice([8, 11]))),
+        
+        # Routing numbers or similar identifiers (6 to 9 digits)
+        lambda: f"{random.randint(100000, 999999999)}",
+        
+        # Transaction amount in various currencies and formats
+        lambda: f"{get_scaled_number(1000, 100000)} {random.choice(currency_names)}",
+        
+        # Date formats relevant to banking (e.g., YYYY-MM-DD, DD/MM/YYYY)
+        lambda: handle_date(),
+        lambda: (datetime.now() - timedelta(days=random.randint(0, 3650))).strftime('%d/%m/%Y'),  # European date format (last 10 years)
+        lambda: (datetime.now() - timedelta(days=random.randint(0, 3650))).strftime('%m-%d-%Y'),  # US date format (last 10 years)
+        
+        # Time format (e.g., 12:34)
+        lambda: handle_time()
+    ]
+    
+    return random.choice(banking_formats)()
+
+
 def handle_english_word():
     word = random.choice(english_words)
     n = random.random()
