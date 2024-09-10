@@ -7,7 +7,7 @@ from typing import Dict
 # Define the symbols
 afterword_symbols = "!?.,:;"
 numbers = "0123456789"
-other_symbols = string.punctuation + "«»…£€¥№°—"
+other_symbols = string.punctuation + "«»…£€¥¢฿₸₽№°—"
 space_symbol = ' '
 kazakh_letters = 'АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯЁабвгдежзийклмнопрстуфхцчшщъыьэюяёӘҒҚҢӨҰҮІҺәғқңөұүіһ'
 english_letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
@@ -17,7 +17,7 @@ assert len(all_symbols) == len(set(all_symbols))
 print(all_symbols)
 
 # Define maximum and minimum sequence length
-max_n = 40
+max_n = 31
 word_count = 1_000_000
 
 # Initialize character counts
@@ -122,14 +122,14 @@ def get_banking_related_number():
         lambda: f"{get_scaled_number(10000000, 999999999999)}",
         
         # Currency formats with different symbols (e.g., $1,234.56, €567.89)
-        lambda: f"{random.choice(currencies)}{get_scaled_number(100, 1000000):,}.{random.randint(0, 99):02d}",  # Currency with symbol
-        lambda: f"{get_scaled_number(100, 1000000):,} {random.choice(currency_names)}",  # Currency with name
+        lambda: f"{random.choice(currencies)}{get_scaled_number_int(100, 1000000):,}.{random.randint(0, 99):02d}",  # Currency with symbol
+        lambda: f"{get_scaled_number_int(100, 1000000):,} {random.choice(currency_names)}",  # Currency with name
         
         # Percentage format (interest rates or other percentages)
         lambda: f"{random.randint(1, 100)}%",
         
         # Loan or balance amounts (e.g., $10,000.00 or €500,000.00)
-        lambda: f"{random.choice(currencies)}{get_scaled_number(1000, 1000000):,}.{random.randint(0, 99):02d}",
+        lambda: f"{random.choice(currencies)}{get_scaled_number_int(1000, 1000000):,}.{random.randint(0, 99):02d}",
         
         # Transaction or reference ID formats (XXX-XXXX-XXX-XXXX)
         lambda: f"{random.randint(100, 999)}-{random.randint(1000, 9999)}-{random.randint(100, 999)}-{random.randint(1000, 9999)}",
@@ -199,6 +199,9 @@ def get_scaled_number(min = 1, max = 100_000):
 
     # Round to the nearest integer
     return str(round(rand_val))
+
+def get_scaled_number_int(min = 1, max = 100_000):
+    return int(get_scaled_number(min, max))
 
 
 # Function to get random number with additional formatting
@@ -271,12 +274,14 @@ def handle_other():
         return "т.б."
 
 def get_candidate() -> str:
-    if random.random() < 0.8:
+    if random.random() < 0.7:
         return get_random_word()
 
     choice = random.random()
     # Append a special symbol
-    if choice < 0.3:
+    if choice < 0.15:
+        return get_banking_related_number()
+    elif choice < 0.3:
         return random.choice(words) + random.choice(afterword_symbols)
     # Append a number
     elif choice < 0.4:
